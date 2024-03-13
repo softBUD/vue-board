@@ -35,6 +35,11 @@ const routes = [
 		path: '/posts/:id',
 		name: 'PostDetail',
 		component: PostDetailView,
+		// route에서 props를 설정할 수 있다.
+		// props: route => ({
+		// 	id: parseInt(route.params.id),
+		// }),
+		props: true,
 	},
 	{
 		path: '/posts/:id/edit',

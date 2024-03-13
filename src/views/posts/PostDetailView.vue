@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<h2>글 제목</h2>
-		<p>내용</p>
-		<p class="text-muted">날짜</p>
+		<h2>{{ post.title }}</h2>
+		<p>{{ post.content }}</p>
+		<p class="text-muted">{{ post.createdAt }}</p>
 		<hr class="my-4" />
 		<div class="row g-2">
 			<div class="col-auto">
@@ -21,21 +21,66 @@
 				</button>
 			</div>
 			<div class="col-auto">
-				<button class="btn btn-outline-danger" @click="deletePost">삭제</button>
+				<button class="btn btn-outline-danger" @click="deleteCurrentPost">
+					삭제
+				</button>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
+import { getPostById, deletePost } from '@/api/posts';
+import { ref } from 'vue';
 
-const route = useRoute();
+const props = defineProps({
+	id: String,
+});
+
 const router = useRouter();
-const id = route.params.id;
+const post = ref({});
+// let reactiveForm = reactive({});
+// 프로젝트의 컨벤션에 따라 둘중 주로 쓰는 것을 택일한다.
 
+// ref = 한꺼번에 객체 전체 할당 가능하지만 form.value처럼 .value 를 항상 붙여서 할당해야함
+// reactive = 속성에 일일이 값을 할당해야하지만 바로 값에 접근 가능
+const fetchPost = async () => {
+	try {
+		const { data } = await getPostById(props.id);
+		// form.value = { ...data };
+		// reactiveForm.title = data.title;
+		// reactiveForm.content = data.content;
+		// reactiveForm.createdAt = data.createdAt;
+		setPost(data);
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+const setPost = ({ title, content, createdAt }) => {
+	post.value.title = title;
+	post.value.content = content;
+	post.value.createdAt = createdAt;
+};
+
+const deleteCurrentPost = async () => {
+	try {
+		// 안티패턴 코드 if문의 depth가 깊어지지않기 위해서 사용
+		if (confirm('삭제하시겠습니까?') === false) {
+			return;
+		}
+		await deletePost(props.id);
+		router.push({ name: 'PostList' });
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+fetchPost();
 const pushListPage = () => router.push({ name: 'PostList' });
-const pushEditPage = () => router.push({ name: 'PostEdit', params: { id } });
+const pushEditPage = () =>
+	router.push({ name: 'PostEdit', params: { id: props.id } });
 </script>
 
 <style scoped></style>
