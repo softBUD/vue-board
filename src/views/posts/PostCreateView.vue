@@ -20,6 +20,7 @@
 				</div>
 			</template>
 		</PostForm>
+		<AppAlert :show="show" :message="message" :type="alertType"></AppAlert>
 	</div>
 </template>
 <script setup>
@@ -27,6 +28,7 @@ import PostForm from '@/components/posts/PostForm.vue';
 import { useRouter } from 'vue-router';
 import { createPost } from '@/api/posts';
 import { ref } from 'vue';
+import AppAlert from '@/components/AppAlert.vue';
 
 const router = useRouter();
 const form = ref({
@@ -41,13 +43,29 @@ const submit = async () => {
 			createAt: Date.now(),
 		};
 		await createPost(data);
-		router.push({ name: 'PostList' });
+		showAlert('저장 완료되었습니다.', 'success');
+		// router.push({ name: 'PostList' });
 	} catch (error) {
-		console.error(error);
+		// console.error(error);
+		showAlert('네트워크오류가 발생했습니다.');
 	}
 };
 
 const pushListPage = () => router.push({ name: 'PostList' });
+
+const show = ref(false);
+const message = ref('');
+const alertType = ref('');
+
+const showAlert = (text, type = 'error') => {
+	message.value = text;
+	show.value = true;
+	alertType.value = type;
+	setTimeout(() => {
+		show.value = false;
+		message.value = '';
+	}, 2000);
+};
 </script>
 
 <style scoped></style>

@@ -10,15 +10,17 @@
 		</div>
 		<hr />
 		<div class="row g-3">
-			<div v-for="post in posts" :key="post.id" class="col-4">
-				<PostItem
-					:title="post.title"
-					:content="post.content"
-					:created-at="post.createdAt"
-					@click="pushPage(post.id)"
-				></PostItem>
-			</div>
-			<nav aria-label="Page navigation example">
+			<AppGrid :items="posts">
+				<template v-slot="{ item }">
+					<PostItem
+						:title="item.title"
+						:content="item.content"
+						:created-at="item.createdAt"
+						@click="pushPage(item.id)"
+					></PostItem>
+				</template>
+			</AppGrid>
+			<!-- <nav aria-label="Page navigation example">
 				<ul class="pagination justify-content-center">
 					<li class="page-item">
 						<a
@@ -53,7 +55,12 @@
 						</a>
 					</li>
 				</ul>
-			</nav>
+			</nav> -->
+			<AppPagination
+				:current-page="params._page"
+				:page-count="pageCount"
+				@page="page => (params._page = page)"
+			></AppPagination>
 		</div>
 		<hr />
 		<AppCard>
@@ -63,6 +70,8 @@
 </template>
 
 <script setup>
+import AppPagination from '@/components/AppPagination.vue';
+import AppGrid from '@/components/AppGrid.vue';
 import PostItem from '@/components/posts/PostItem.vue';
 import { computed, ref, watchEffect, watch } from 'vue';
 import { useRouter } from 'vue-router';

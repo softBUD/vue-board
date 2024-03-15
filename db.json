@@ -1,70 +1,63 @@
 {
   "posts": [
     {
-      "id": 1,
-      "title": "제목1",
-      "content": "내용1",
-      "createdAt": "2023-01-01"
-    },
-    {
-      "id": 2,
-      "title": "제목1",
-      "content": "내용1",
-      "createdAt": "2023-01-01"
-    },
-    {
-      "id": 3,
-      "title": "제목2",
-      "content": "내용2",
-      "createdAt": "2023-01-02"
-    },
-    {
-      "id": 4,
-      "title": "제목4",
-      "content": "내용4",
-      "createdAt": "2023-01-04"
-    },
-    {
-      "id": 5,
-      "title": "제목5",
-      "content": "내용5",
-      "createdAt": "2023-01-05"
-    },
-    {
-      "id": 6,
-      "title": "제목6",
-      "content": "내용6",
-      "createdAt": "2023-01-06"
-    },
-    {
-      "id": 7,
-      "title": "제목7",
-      "content": "내용7",
-      "createdAt": "2023-01-07"
-    },
-    {
-      "id": 8,
-      "title": "제목8",
-      "content": "내용8",
-      "createdAt": "2023-01-08"
-    },
-    {
-      "title": "제목9999",
-      "content": "내용9999",
-      "createdAt": "2023-01-09",
-      "id": 9
-    },
-    {
-      "id": 10,
-      "title": "제목10",
-      "content": "내용10",
-      "createdAt": "2023-01-10"
-    },
-    {
       "title": "새게시글등록",
       "content": "등록",
       "createAt": 1710321815100,
       "id": 11
+    },
+    {
+      "title": "글쓰기 2222",
+      "content": "새게시글2222",
+      "createAt": 1710390640338,
+      "id": 12
+    },
+    {
+      "title": "새글등록",
+      "content": "새글",
+      "id": 13
+    },
+    {
+      "title": "새 글4",
+      "content": "새글번호4",
+      "createAt": 1710401515754,
+      "id": 14
+    },
+    {
+      "title": "글쓰기 55",
+      "content": "내용 5555",
+      "createAt": 1710402138081,
+      "id": 15
+    },
+    {
+      "title": "ㅎㅎㅎㅎㅎ",
+      "content": "ㄱㄱㅀ롲ㅇㄹㄴ",
+      "createAt": 1710489738829,
+      "id": 16
+    },
+    {
+      "title": "67ㅅ홓",
+      "content": "ㅀ롤ㄴㄴㅇㅎ",
+      "createAt": 1710489758226,
+      "id": 17
+    },
+    {
+      "title": "새글입니다",
+      "content": "새글",
+      "createAt": 1710489783151,
+      "id": 18
+    },
+    {
+      "title": "ㅎㅎㅎㅎ",
+      "content": "ㅎㅎㅎㅎㅎ",
+      "createAt": 1710491003342,
+      "id": 19
+    },
+    {
+      "title": "00000",
+      "content": "000000",
+      "createAt": 1710491033307,
+      "id": 20
     }
   ]
 }
