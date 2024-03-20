@@ -13,4 +13,5 @@ function create(baseURL, options) {
 
 // eslint-disable-next-line no-undef
 const baseURL = `${process.env.VUE_APP_API_URL}posts/`;
+console.log(baseURL);
 export const posts = create(baseURL);

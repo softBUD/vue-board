@@ -54,7 +54,7 @@ const fetchPost = async () => {
 		// reactiveForm.createdAt = data.createdAt;
 		setPost(data);
 	} catch (error) {
-		console.error(error);
+		// console.error(error);
 	}
 };
 
