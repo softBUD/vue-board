@@ -17,6 +17,7 @@
 						:content="item.content"
 						:created-at="item.createdAt"
 						@click="pushPage(item.id)"
+						@modal="openModal(item)"
 					></PostItem>
 				</template>
 			</AppGrid>
@@ -67,6 +68,15 @@
 			<PostDetailView :id="2"></PostDetailView>
 		</AppCard>
 	</div>
+	<!-- 컴포넌트를 DOM을 지정하여 특정위치로 이동시킬수있음 -->
+	<Teleport to="#modal">
+		<PostModal
+			v-model="show"
+			:title="modalTitle"
+			:content="modalContent"
+			:createdAt="modalCreatedAt"
+		></PostModal>
+	</Teleport>
 </template>
 
 <script setup>
@@ -78,6 +88,8 @@ import { useRouter } from 'vue-router';
 import PostDetailView from './PostDetailView.vue';
 import AppCard from '@/components/AppCard.vue';
 import { getPostList } from '@/api/posts';
+import PostModal from '@/components/posts/PostModal.vue';
+// import AppModal from '@/components/AppModal.vue';
 
 const router = useRouter();
 const posts = ref([]);
@@ -122,6 +134,23 @@ watch(
 		}
 	},
 );
+
+// modal state
+
+const modalTitle = ref('');
+const modalContent = ref('');
+const modalCreatedAt = ref('');
+const show = ref(false);
+
+const openModal = ({ title, content, createdAt }) => {
+	show.value = true;
+	modalTitle.value = title;
+	modalContent.value = content;
+	modalCreatedAt.value = createdAt;
+};
+// const closeModal = () => {
+// 	show.value = false;
+// };
 </script>
 
 <style scoped></style>

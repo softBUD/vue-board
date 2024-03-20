@@ -20,7 +20,8 @@
 				</div>
 			</template>
 		</PostForm>
-		<AppAlert :show="show" :message="message" :type="alertType"></AppAlert>
+		<!-- <AppAlert :show="show" :message="message" :type="alertType"></AppAlert> -->
+		<AppAlert :items="alerts"></AppAlert>
 	</div>
 </template>
 <script setup>
@@ -53,17 +54,21 @@ const submit = async () => {
 
 const pushListPage = () => router.push({ name: 'PostList' });
 
-const show = ref(false);
-const message = ref('');
-const alertType = ref('');
+// const show = ref(false);
+// const message = ref('');
+// const alertType = ref('');
 
-const showAlert = (text, type = 'error') => {
-	message.value = text;
-	show.value = true;
-	alertType.value = type;
+const alerts = ref([]);
+
+const showAlert = (message, type = 'error') => {
+	alerts.value.push({ message, type });
+	// message.value = text;
+	// show.value = true;
+	// alertType.value = type;
 	setTimeout(() => {
-		show.value = false;
-		message.value = '';
+		// show.value = false;
+		// message.value = '';
+		alerts.value.shift();
 	}, 2000);
 };
 </script>

@@ -61,4 +61,13 @@ const isNextPage = computed(() => {
 // 부모 컴포넌트인 PostListPage에 page라는 값을 보내서 params로 선언한 상태값의 값을 갱신
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+li a {
+	cursor: pointer;
+	user-select: none;
+}
+
+.disabled {
+	cursor: default;
+}
+</style>
