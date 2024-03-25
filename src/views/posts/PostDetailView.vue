@@ -1,5 +1,7 @@
 <template>
-	<div>
+	<AppLoading v-if="loading" />
+	<AppError v-else-if="error" :message="error.message" />
+	<div v-else>
 		<h2>{{ post.title }}</h2>
 		<p>{{ post.content }}</p>
 		<p class="text-muted">
@@ -35,6 +37,11 @@
 import { useRouter } from 'vue-router';
 import { getPostById, deletePost } from '@/api/posts';
 import { ref } from 'vue';
+import AppLoading from '@/components/app/AppLoading.vue';
+import AppError from '@/components/app/AppError.vue';
+
+const error = ref(null);
+const loading = ref(false);
 
 const props = defineProps({
 	id: [String, Number],
@@ -49,14 +56,18 @@ const post = ref({});
 // reactive = 속성에 일일이 값을 할당해야하지만 바로 값에 접근 가능
 const fetchPost = async () => {
 	try {
+		loading.value = true;
 		const { data } = await getPostById(props.id);
 		// form.value = { ...data };
 		// reactiveForm.title = data.title;
 		// reactiveForm.content = data.content;
 		// reactiveForm.createdAt = data.createdAt;
 		setPost(data);
-	} catch (error) {
+	} catch (err) {
 		// console.error(error);
+		error.value = err;
+	} finally {
+		loading.value = false;
 	}
 };
 

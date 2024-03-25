@@ -17,12 +17,25 @@
 					>
 						목록
 					</button>
-					<button type="submit" class="btn btn-primary">저장</button>
+					<button
+						class="btn btn-primary"
+						type="button"
+						:disabled="loading"
+						@click="submit"
+					>
+						<template v-if="loading">
+							<span
+								class="spinner-border spinner-border-sm"
+								aria-hidden="true"
+							></span>
+							<span class="visually-hidden" role="status">Loading...</span>
+						</template>
+						<template v-else>저장</template>
+					</button>
 				</div>
 			</template>
 		</PostForm>
 		<!-- <AppAlert :show="show" :message="message" :type="alertType"></AppAlert> -->
-		<AppAlert :items="alerts"></AppAlert>
 	</div>
 </template>
 <script setup>
@@ -30,6 +43,12 @@ import PostForm from '@/components/posts/PostForm.vue';
 import { useRouter } from 'vue-router';
 import { createPost } from '@/api/posts';
 import { ref } from 'vue';
+import { useAlert } from '@/composables/alert';
+
+const error = ref(null);
+const loading = ref(false);
+
+const { showAlert, showSuccessAlert } = useAlert();
 
 const router = useRouter();
 const form = ref({
@@ -39,16 +58,19 @@ const form = ref({
 
 const submit = async () => {
 	try {
+		loading.value = true;
 		const data = {
 			...form.value,
 			createAt: Date.now(),
 		};
 		await createPost(data);
-		showAlert('저장 완료되었습니다.', 'success');
-		// router.push({ name: 'PostList' });
-	} catch (error) {
-		// console.error(error);
-		showAlert('네트워크오류가 발생했습니다.');
+		router.push({ name: 'PostList' });
+		showSuccessAlert('저장 완료되었습니다.');
+	} catch (err) {
+		showAlert(err.message);
+		error.value = err;
+	} finally {
+		loading.value = false;
 	}
 };
 
@@ -57,20 +79,6 @@ const pushListPage = () => router.push({ name: 'PostList' });
 // const show = ref(false);
 // const message = ref('');
 // const alertType = ref('');
-
-const alerts = ref([]);
-
-const showAlert = (message, type = 'error') => {
-	alerts.value.push({ message, type });
-	// message.value = text;
-	// show.value = true;
-	// alertType.value = type;
-	setTimeout(() => {
-		// show.value = false;
-		// message.value = '';
-		alerts.value.shift();
-	}, 2000);
-};
 
 const visibleForm = ref(true);
 </script>

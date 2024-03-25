@@ -10,18 +10,23 @@
 		</div>
 		<hr />
 		<div class="row g-3">
-			<AppGrid :items="posts">
-				<template v-slot="{ item }">
-					<PostItem
-						:title="item.title"
-						:content="item.content"
-						:created-at="item.createdAt"
-						@click="pushPage(item.id)"
-						@modal="openModal(item)"
-					></PostItem>
-				</template>
-			</AppGrid>
-			<!-- <nav aria-label="Page navigation example">
+			<AppLoading v-if="loading" />
+			<!-- loading:false 이고 error:true 일때 -->
+			<AppError v-else-if="error" :message="error.message" />
+
+			<template v-else>
+				<AppGrid :items="posts">
+					<template v-slot="{ item }">
+						<PostItem
+							:title="item.title"
+							:content="item.content"
+							:created-at="item.createdAt"
+							@click="pushPage(item.id)"
+							@modal="openModal(item)"
+						></PostItem>
+					</template>
+				</AppGrid>
+				<!-- <nav aria-label="Page navigation example">
 				<ul class="pagination justify-content-center">
 					<li class="page-item">
 						<a
@@ -57,16 +62,17 @@
 					</li>
 				</ul>
 			</nav> -->
-			<AppPagination
-				:current-page="params._page"
-				:page-count="pageCount"
-				@page="page => (params._page = page)"
-			></AppPagination>
+				<AppPagination
+					:current-page="params._page"
+					:page-count="pageCount"
+					@page="page => (params._page = page)"
+				></AppPagination>
+			</template>
 		</div>
 		<hr />
-		<AppCard>
+		<!-- <AppCard>
 			<PostDetailView :id="2"></PostDetailView>
-		</AppCard>
+		</AppCard> -->
 	</div>
 	<!-- 컴포넌트를 DOM을 지정하여 특정위치로 이동시킬수있음 -->
 	<Teleport to="#modal">
@@ -83,10 +89,15 @@
 import PostItem from '@/components/posts/PostItem.vue';
 import { computed, ref, watchEffect, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import PostDetailView from './PostDetailView.vue';
+// import PostDetailView from './PostDetailView.vue';
 import { getPostList } from '@/api/posts';
 import PostModal from '@/components/posts/PostModal.vue';
+import AppError from '@/components/app/AppError.vue';
+import AppLoading from '@/components/app/AppLoading.vue';
 // import AppModal from '@/components/AppModal.vue';
+
+const error = ref(null);
+const loading = ref(false);
 
 const router = useRouter();
 const posts = ref([]);
@@ -110,11 +121,14 @@ const fetchPosts = async () => {
 	// posts.value = getPostData();
 
 	try {
+		loading.value = true;
 		const { data, headers } = await getPostList(params.value);
 		posts.value = data;
 		totalCount.value = headers['x-total-count'];
-	} catch (error) {
-		console.error(error);
+	} catch (err) {
+		error.value = err;
+	} finally {
+		loading.value = false;
 	}
 };
 

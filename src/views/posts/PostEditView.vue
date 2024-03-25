@@ -16,10 +16,25 @@
 					>
 						취소
 					</button>
-					<button type="submit" class="btn btn-primary">저장</button>
+					<button
+						class="btn btn-primary"
+						type="button"
+						:disabled="loading"
+						@click="edit"
+					>
+						<template v-if="loading">
+							<span
+								class="spinner-border spinner-border-sm"
+								aria-hidden="true"
+							></span>
+							<span class="visually-hidden" role="status">Loading...</span>
+						</template>
+						<template v-else>저장</template>
+					</button>
 				</div>
 			</template>
 		</PostForm>
+		<!-- <AppAlert :items="alerts"></AppAlert> -->
 	</div>
 </template>
 
@@ -28,6 +43,12 @@ import PostForm from '@/components/posts/PostForm.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { getPostById, updatePost } from '@/api/posts';
 import { ref } from 'vue';
+import { useAlert } from '@/composables/alert';
+
+const { showAlert, showSuccessAlert } = useAlert();
+
+const error = ref(null);
+const loading = ref(false);
 
 const route = useRoute();
 const router = useRouter();
@@ -51,11 +72,15 @@ const setForm = ({ title, content, createdAt }) => {
 
 const edit = async () => {
 	try {
+		loading.value = true;
 		await updatePost(id, { ...form.value });
-		debugger;
 		router.push({ name: 'PostDetail', params: { id } });
-	} catch (error) {
-		console.error(error);
+		showSuccessAlert('저장 완료되었습니다.');
+	} catch (err) {
+		showAlert(err.message);
+		error.value = err;
+	} finally {
+		loading.value = false;
 	}
 };
 
