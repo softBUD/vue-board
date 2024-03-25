@@ -52,6 +52,7 @@ const setForm = ({ title, content, createdAt }) => {
 const edit = async () => {
 	try {
 		await updatePost(id, { ...form.value });
+		debugger;
 		router.push({ name: 'PostDetail', params: { id } });
 	} catch (error) {
 		console.error(error);

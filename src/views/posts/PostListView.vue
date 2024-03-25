@@ -80,13 +80,10 @@
 </template>
 
 <script setup>
-import AppPagination from '@/components/AppPagination.vue';
-import AppGrid from '@/components/AppGrid.vue';
 import PostItem from '@/components/posts/PostItem.vue';
 import { computed, ref, watchEffect, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import PostDetailView from './PostDetailView.vue';
-import AppCard from '@/components/AppCard.vue';
 import { getPostList } from '@/api/posts';
 import PostModal from '@/components/posts/PostModal.vue';
 // import AppModal from '@/components/AppModal.vue';

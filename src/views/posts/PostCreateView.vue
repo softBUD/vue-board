@@ -1,8 +1,9 @@
 <template>
 	<div>
-		<h2>게시글 등록</h2>
+		<h2 @click="visibleForm = !visibleForm">게시글 등록</h2>
 		<hr />
 		<PostForm
+			v-if="visibleForm"
 			v-model:title="form.title"
 			v-model:content="form.content"
 			@submit.prevent="submit"
@@ -29,7 +30,6 @@ import PostForm from '@/components/posts/PostForm.vue';
 import { useRouter } from 'vue-router';
 import { createPost } from '@/api/posts';
 import { ref } from 'vue';
-import AppAlert from '@/components/AppAlert.vue';
 
 const router = useRouter();
 const form = ref({
@@ -71,6 +71,8 @@ const showAlert = (message, type = 'error') => {
 		alerts.value.shift();
 	}, 2000);
 };
+
+const visibleForm = ref(true);
 </script>
 
 <style scoped></style>

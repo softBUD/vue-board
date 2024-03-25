@@ -21,12 +21,10 @@ export default {
 <!-- 컴포넌트 인스턴스는 setup 라이프사이클 이후에 생성됨. -->
 
 <script setup>
-import { inject, ref } from 'vue';
-import AppGrid from '@/components/AppGrid.vue';
-import AppCard from '@/components/AppCard.vue';
+import { ref } from 'vue';
 const items = ref(['사과', '딸기', '포도', '바나나']);
-const person = inject('person');
-console.log('person? : ', person.name);
+// const person = inject('person');
+// console.log('person? : ', person.name);
 </script>
 
 <style scoped></style>
