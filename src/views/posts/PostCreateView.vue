@@ -41,12 +41,10 @@
 <script setup>
 import PostForm from '@/components/posts/PostForm.vue';
 import { useRouter } from 'vue-router';
-import { createPost } from '@/api/posts';
+// import { createPost } from '@/api/posts';
 import { ref } from 'vue';
 import { useAlert } from '@/composables/alert';
-
-const error = ref(null);
-const loading = ref(false);
+import { useAxios } from '@/composables/axios';
 
 const { showAlert, showSuccessAlert } = useAlert();
 
@@ -55,23 +53,41 @@ const form = ref({
 	title: null,
 	content: null,
 });
+const { error, loading } = useAxios(
+	'/posts',
+	{
+		method: 'post',
+		data: { ...form.value, createdAt: Date.now() },
+	},
+	{
+		immediate: false,
+		onSuccess: () => {
+			router.push({ name: 'PostList' });
+			showSuccessAlert('저장완료');
+		},
+		onError: () => {
+			showAlert(error.value.message);
+		},
+	},
+);
 
+// 내부적으로 비동기처리 되어있으므로, 콜백함수를 통해 alert 기능을 전달
 const submit = async () => {
-	try {
-		loading.value = true;
-		const data = {
-			...form.value,
-			createAt: Date.now(),
-		};
-		await createPost(data);
-		router.push({ name: 'PostList' });
-		showSuccessAlert('저장 완료되었습니다.');
-	} catch (err) {
-		showAlert(err.message);
-		error.value = err;
-	} finally {
-		loading.value = false;
-	}
+	// try {
+	// 	loading.value = true;
+	// 	const data = {
+	// 		...form.value,
+	// 		createAt: Date.now(),
+	// 	};
+	// 	await createPost(data);
+	// 	router.push({ name: 'PostList' });
+	// 	showSuccessAlert('저장 완료되었습니다.');
+	// } catch (err) {
+	// 	showAlert(err.message);
+	// 	error.value = err;
+	// } finally {
+	// 	loading.value = false;
+	// }
 };
 
 const pushListPage = () => router.push({ name: 'PostList' });

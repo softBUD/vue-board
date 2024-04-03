@@ -87,20 +87,21 @@
 
 <script setup>
 import PostItem from '@/components/posts/PostItem.vue';
-import { computed, ref, watchEffect, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 // import PostDetailView from './PostDetailView.vue';
-import { getPostList } from '@/api/posts';
+// import { getPostList } from '@/api/posts';
 import PostModal from '@/components/posts/PostModal.vue';
 import AppError from '@/components/app/AppError.vue';
 import AppLoading from '@/components/app/AppLoading.vue';
 // import AppModal from '@/components/AppModal.vue';
+import { useAxios } from '@/composables/axios';
 
-const error = ref(null);
-const loading = ref(false);
+// const error = ref(null);
+// const loading = ref(false);
 
 const router = useRouter();
-const posts = ref([]);
+// const posts = ref([]);
 const params = ref({
 	_sort: 'createdAt',
 	_order: 'desc',
@@ -108,35 +109,40 @@ const params = ref({
 	_limit: 3,
 });
 
-const totalCount = ref(0);
+const {
+	data: posts,
+	loading,
+	error,
+	response,
+} = useAxios('/posts', { method: 'get', params });
+
+const totalCount = computed(() => response.value.headers['x-total-count']);
 const pageCount = computed(() =>
 	Math.ceil(totalCount.value / params.value._limit),
 );
-const fetchPosts = async () => {
-	// vue의 watchEffect는 자동으로 의존하는 상태를 추적하여 관리한다.
-	// const response =  getPostList().then(response => {
-	// 	console.log('response :', response);
-	// });
-
-	// posts.value = getPostData();
-
-	try {
-		loading.value = true;
-		const { data, headers } = await getPostList(params.value);
-		posts.value = data;
-		totalCount.value = headers['x-total-count'];
-	} catch (err) {
-		error.value = err;
-	} finally {
-		loading.value = false;
-	}
-};
+// const fetchPosts = async () => {
+// vue의 watchEffect는 자동으로 의존하는 상태를 추적하여 관리한다.
+// const response =  getPostList().then(response => {
+// 	console.log('response :', response);
+// });
+// posts.value = getPostData();
+// try {
+// 	loading.value = true;
+// 	const { data, headers } = await getPostList(params.value);
+// 	posts.value = data;
+// 	totalCount.value = headers['x-total-count'];
+// } catch (err) {
+// 	error.value = err;
+// } finally {
+// 	loading.value = false;
+// }
+// };
 
 const pushPage = number => {
 	router.push(`/posts/${number}`);
 };
 
-watchEffect(fetchPosts);
+// watchEffect(fetchPosts);
 watch(
 	() => params.value._limit,
 	(newLimit, oldLimit) => {
