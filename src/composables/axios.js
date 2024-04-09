@@ -28,7 +28,7 @@ export const useAxios = (url, config = {}, options = {}) => {
 		loading.value = true;
 		data.value = null;
 		error.value = null;
-		axios(url, {
+		axios(unref(url), {
 			...defaultConfig,
 			...config,
 			params: unref(params),
@@ -50,7 +50,7 @@ export const useAxios = (url, config = {}, options = {}) => {
 			});
 	};
 
-	if (isRef(params)) {
+	if (isRef(params) || isRef(url)) {
 		watchEffect(excute);
 		// watchEffect로 excute를 실행할때 첫번째 파라미터는 함수가 넘어옴
 		// watchEffect 공식문서 참조

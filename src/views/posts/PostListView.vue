@@ -23,6 +23,7 @@
 							:created-at="item.createdAt"
 							@click="pushPage(item.id)"
 							@modal="openModal(item)"
+							@preview="selectPreview(item.id)"
 						></PostItem>
 					</template>
 				</AppGrid>
@@ -70,9 +71,11 @@
 			</template>
 		</div>
 		<hr />
-		<!-- <AppCard>
-			<PostDetailView :id="2"></PostDetailView>
-		</AppCard> -->
+		<template v-if="previewId">
+			<AppCard class="my-5">
+				<PostDetailView :id="previewId"></PostDetailView>
+			</AppCard>
+		</template>
 	</div>
 	<!-- 컴포넌트를 DOM을 지정하여 특정위치로 이동시킬수있음 -->
 	<Teleport to="#modal">
@@ -89,7 +92,7 @@
 import PostItem from '@/components/posts/PostItem.vue';
 import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-// import PostDetailView from './PostDetailView.vue';
+import PostDetailView from './PostDetailView.vue';
 // import { getPostList } from '@/api/posts';
 import PostModal from '@/components/posts/PostModal.vue';
 import AppError from '@/components/app/AppError.vue';
@@ -99,6 +102,9 @@ import { useAxios } from '@/composables/axios';
 
 // const error = ref(null);
 // const loading = ref(false);
+
+const previewId = ref(null);
+const selectPreview = id => (previewId.value = id);
 
 const router = useRouter();
 // const posts = ref([]);

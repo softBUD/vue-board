@@ -41,6 +41,7 @@ import AppLoading from '@/components/app/AppLoading.vue';
 import AppError from '@/components/app/AppError.vue';
 import { useAxios } from '@/composables/axios';
 import { useAlert } from '@/composables/alert';
+import { computed } from 'vue';
 
 const { showAlert, showSuccessAlert } = useAlert();
 
@@ -51,7 +52,10 @@ const props = defineProps({
 	id: [String, Number],
 });
 
-const { data: post, error, loading } = useAxios(`/posts/${props.id}`);
+// useAxios 훅에 url을 반응형 데이터로 넘겨줘야
+// 버튼을 클릭할때마다 새로운 데이터가 조회된다.
+const url = computed(() => `/posts/${props.id}`);
+const { data: post, error, loading } = useAxios(url);
 const router = useRouter();
 
 const { excute } = useAxios(
