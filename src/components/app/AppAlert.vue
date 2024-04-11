@@ -8,7 +8,7 @@
 		<TransitionGroup name="slide">
 			<!-- 구조분해할당 -->
 			<div
-				v-for="({ message, type }, index) in items"
+				v-for="({ message, type }, index) in alerts"
 				:key="index"
 				:class="styleType(type)"
 				class="alert"
@@ -21,10 +21,8 @@
 </template>
 
 <script setup>
-defineProps({
-	items: Array,
-});
-
+import { useAlert } from '@/composables/alert';
+const { alerts } = useAlert();
 // const props = defineProps({
 // 	show: {
 // 		type: Boolean,
