@@ -45,6 +45,14 @@
 								>Nested</RouterLink
 							>
 						</li>
+						<li class="nav-item">
+							<RouterLink
+								class="nav-link active"
+								aria-current="page"
+								to="/my?query=1"
+								>Mypage</RouterLink
+							>
+						</li>
 					</ul>
 					<button class="btn btn-outline-light" @click="goCreatePage">
 						글쓰기
